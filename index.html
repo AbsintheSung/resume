@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>黃韋菘 — 應徵 EVOASIS 全端軟體工程師</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --navy: #1A3A5C;
+    --dark-navy: #0F2440;
+    --green: #00A86B;
+    --green-light: #E8F5E9;
+    --white: #FFFFFF;
+    --off-white: #F5F7FA;
+    --gray-light: #E2E8F0;
+    --text-dark: #1E293B;
+    --text-mid: #475569;
+    --text-light: #94A3B8;
+  }
+
+  html { scroll-behavior: smooth; scroll-snap-type: y mandatory; overflow-y: scroll; }
+  body { font-family: "Microsoft JhengHei", "Noto Sans TC", -apple-system, sans-serif; color: var(--text-dark); }
+
+  /* ===== Slide Layout ===== */
+  .slide {
+    min-height: 100vh;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide-inner {
+    max-width: 960px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* ===== Animations ===== */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .fade-up.d1 { transition-delay: 0.1s; }
+  .fade-up.d2 { transition-delay: 0.2s; }
+  .fade-up.d3 { transition-delay: 0.3s; }
+  .fade-up.d4 { transition-delay: 0.4s; }
+  .fade-up.d5 { transition-delay: 0.5s; }
+  .fade-up.d6 { transition-delay: 0.6s; }
+
+  /* ===== Navigation Dots ===== */
+  .nav-dots {
+    position: fixed;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    z-index: 100;
+  }
+  .nav-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--text-light);
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+  }
+  .nav-dot.active {
+    background: var(--green);
+    transform: scale(1.4);
+  }
+
+  /* ===== Slide 1: Cover ===== */
+  .slide-cover {
+    background: var(--dark-navy);
+    color: var(--white);
+  }
+  .slide-cover::before {
+    content: "";
+    position: absolute;
+    top: -80px; right: -60px;
+    width: 400px; height: 400px;
+    background: var(--green);
+    opacity: 0.08;
+    border-radius: 50%;
+  }
+  .slide-cover::after {
+    content: "";
+    position: absolute;
+    bottom: -120px; left: -100px;
+    width: 350px; height: 350px;
+    background: var(--navy);
+    opacity: 0.15;
+    border-radius: 50%;
+  }
+  .cover-accent {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--green);
+  }
+  .cover-name {
+    font-size: 3.2rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .cover-position {
+    font-size: 1.15rem;
+    color: var(--green);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+  .cover-sep {
+    width: 80px; height: 3px;
+    background: var(--green);
+    margin-bottom: 1.5rem;
+  }
+  .cover-intro {
+    font-size: 1rem;
+    color: var(--text-light);
+    line-height: 1.8;
+    max-width: 600px;
+  }
+  .cover-contact {
+    margin-top: 2.5rem;
+    font-size: 0.85rem;
+    color: var(--text-light);
+  }
+  .cover-contact a { color: var(--text-light); text-decoration: none; }
+  .cover-contact a:hover { color: var(--green); }
+
+  /* ===== Section Headers ===== */
+  .section-tag {
+    font-size: 0.85rem;
+    color: var(--green);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-size: 2rem;
+    color: var(--navy);
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+  .section-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-mid);
+    margin-bottom: 2rem;
+  }
+
+  /* ===== Slide 2: Timeline ===== */
+  .slide-timeline { background: var(--off-white); }
+
+  .timeline {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    position: relative;
+    padding: 1rem 0;
+  }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    top: 38px; left: 40px; right: 40px;
+    height: 2px;
+    background: var(--gray-light);
+  }
+  .timeline-step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .timeline-icon {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+    margin-bottom: 0.8rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .timeline-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 0.25rem;
+  }
+  .timeline-sub {
+    font-size: 0.75rem;
+    color: var(--text-mid);
+    margin-bottom: 0.25rem;
+  }
+  .timeline-year {
+    font-size: 0.75rem;
+    color: var(--green);
+    font-weight: 600;
+  }
+
+  .highlight-box {
+    margin-top: 2rem;
+    background: var(--white);
+    border-left: 4px solid var(--green);
+    padding: 1rem 1.25rem;
+    border-radius: 0 8px 8px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .highlight-box strong { color: var(--navy); }
+
+  /* ===== Slide 3: Skills ===== */
+  .slide-skills { background: var(--white); }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+  .skill-card {
+    background: var(--off-white);
+    border-radius: 10px;
+    padding: 1.25rem;
+    transition: transform 0.2s;
+  }
+  .skill-card:hover { transform: translateY(-3px); }
+  .skill-card-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 0.6rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .skill-card-title .icon {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    background: var(--navy);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; flex-shrink: 0;
+  }
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .skill-tag {
+    display: inline-block;
+    background: var(--navy);
+    color: var(--white);
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+  }
+  .skill-tag.green {
+    background: var(--green);
+  }
+
+  .ai-block {
+    background: linear-gradient(135deg, var(--dark-navy), var(--navy));
+    color: var(--white);
+    border-radius: 10px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .ai-block-icon {
+    width: 48px; height: 48px;
+    background: var(--green);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+  .ai-block-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  .ai-block-desc {
+    font-size: 0.82rem;
+    color: var(--text-light);
+    line-height: 1.5;
+  }
+
+  .note-box {
+    margin-top: 1rem;
+    background: var(--green-light);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    font-size: 0.82rem;
+    color: var(--navy);
+    font-style: italic;
+  }
+
+  /* ===== Slide 4 & 5: Projects ===== */
+  .slide-project { background: var(--off-white); }
+  .slide-project-alt { background: var(--white); }
+
+  .project-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+  .project-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .project-info-card {
+    background: var(--white);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border-left: 4px solid var(--green);
+  }
+  .project-info-card.navy-border { border-left-color: var(--navy); }
+  .project-info-card strong { color: var(--navy); display: block; margin-bottom: 0.25rem; font-size: 0.9rem; }
+  .project-info-card span { color: var(--text-mid); font-size: 0.85rem; }
+
+  .project-detail-card {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  }
+  .slide-project-alt .project-detail-card {
+    background: var(--off-white);
+  }
+  .project-detail-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 0.8rem;
+  }
+  .project-detail-card ul {
+    list-style: none;
+    padding: 0;
+  }
+  .project-detail-card li {
+    font-size: 0.85rem;
+    color: var(--text-mid);
+    padding: 0.35rem 0;
+    padding-left: 1.2rem;
+    position: relative;
+  }
+  .project-detail-card li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0.65rem;
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+  }
+
+  .project-date {
+    font-size: 0.82rem;
+    color: var(--text-mid);
+    margin-bottom: 1rem;
+  }
+
+  .project-links {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--green);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.4rem 0.8rem;
+    border: 2px solid var(--green);
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .project-link:hover {
+    background: var(--green);
+    color: var(--white);
+  }
+
+  .project-insight {
+    margin-top: 1rem;
+    background: var(--green-light);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    font-size: 0.82rem;
+    color: var(--navy);
+  }
+  .project-insight strong { color: var(--navy); }
+
+  /* ===== Slide 6: Closing ===== */
+  .slide-closing {
+    background: var(--dark-navy);
+    color: var(--white);
+  }
+  .slide-closing::before {
+    content: "";
+    position: absolute;
+    top: -60px; right: -40px;
+    width: 300px; height: 300px;
+    background: var(--green);
+    opacity: 0.06;
+    border-radius: 50%;
+  }
+  .closing-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .closing-sep {
+    width: 60px; height: 3px;
+    background: var(--green);
+    margin-bottom: 2rem;
+  }
+  .closing-points {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 2.5rem;
+  }
+  .closing-points li {
+    font-size: 1.05rem;
+    padding: 0.5rem 0;
+    padding-left: 2rem;
+    position: relative;
+    color: var(--white);
+  }
+  .closing-points li::before {
+    content: "\2713";
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  .closing-divider {
+    width: 100%; height: 1px;
+    background: rgba(255,255,255,0.15);
+    margin-bottom: 1.5rem;
+  }
+  .closing-contact {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 0.8rem;
+  }
+  .closing-contact a { color: var(--text-light); text-decoration: none; }
+  .closing-contact a:hover { color: var(--green); }
+  .closing-thanks {
+    font-size: 1.05rem;
+    color: var(--green);
+    font-weight: 600;
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 768px) {
+    .slide { padding: 2rem 1.25rem; }
+    .cover-name { font-size: 2.2rem; }
+    .section-title { font-size: 1.5rem; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .project-layout { grid-template-columns: 1fr; }
+    .timeline { flex-direction: column; gap: 1.5rem; align-items: flex-start; }
+    .timeline::before {
+      top: 0; bottom: 0; left: 30px; right: auto;
+      width: 2px; height: auto;
+    }
+    .timeline-step {
+      flex-direction: row;
+      text-align: left;
+      gap: 1rem;
+    }
+    .timeline-icon { width: 50px; height: 50px; flex-shrink: 0; }
+    .nav-dots { display: none; }
+    .closing-title { font-size: 1.6rem; }
+    .closing-points li { font-size: 0.92rem; }
+  }
+
+  /* ===== Print ===== */
+  @media print {
+    html { scroll-snap-type: none; }
+    .slide { min-height: auto; page-break-after: always; padding: 1rem; }
+    .nav-dots { display: none; }
+    .fade-up { opacity: 1 !important; transform: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navigation Dots -->
+<nav class="nav-dots" id="navDots"></nav>
+
+<!-- ============================================================ -->
+<!-- SLIDE 1: Cover -->
+<!-- ============================================================ -->
+<section class="slide slide-cover" id="slide-0">
+  <div class="cover-accent"></div>
+  <div class="slide-inner">
+    <h1 class="cover-name fade-up">黃韋菘</h1>
+    <p class="cover-position fade-up d1">應徵  EVOASIS 源點科技 — 全端軟體工程師</p>
+    <div class="cover-sep fade-up d2"></div>
+    <div class="cover-intro fade-up d3">
+      <p>具備 Vue.js 前端開發實力的轉職工程師</p>
+      <p>擁有技術客服問題解決經驗與團隊協作能力</p>
+    </div>
+    <div class="cover-contact fade-up d4">
+      <a href="mailto:h90243768@gmail.com">h90243768@gmail.com</a> &nbsp;|&nbsp;
+      0932-051-549 &nbsp;|&nbsp;
+      <a href="https://github.com/AbsintheSung" target="_blank">github.com/AbsintheSung</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 2: Journey / Timeline -->
+<!-- ============================================================ -->
+<section class="slide slide-timeline" id="slide-1">
+  <div class="slide-inner">
+    <p class="section-tag fade-up">About Me</p>
+    <h2 class="section-title fade-up d1">我的轉職歷程</h2>
+    <p class="section-subtitle fade-up d2">從土木工程到前端開發 — 持續學習與行動的證明</p>
+
+    <div class="timeline fade-up d3">
+      <div class="timeline-step">
+        <div class="timeline-icon"><span style="color:#fff">&#127891;</span></div>
+        <div class="timeline-label">土木工程系</div>
+        <div class="timeline-sub">中原大學畢業</div>
+        <div class="timeline-year">2015</div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-icon"><span style="color:#fff">&#128187;</span></div>
+        <div class="timeline-label">技術客服</div>
+        <div class="timeline-sub">精誠資訊 HelpDesk</div>
+        <div class="timeline-year">2020-2021</div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-icon"><span style="color:#fff">&#128218;</span></div>
+        <div class="timeline-label">自學前端</div>
+        <div class="timeline-sub">HTML / CSS / JS / Vue</div>
+        <div class="timeline-year">2021-2024</div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-icon"><span style="color:#fff">&#128640;</span></div>
+        <div class="timeline-label">培訓營</div>
+        <div class="timeline-sub">火箭隊 8 個月</div>
+        <div class="timeline-year">2024</div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-icon"><span style="color:#fff">&#128421;</span></div>
+        <div class="timeline-label">前端工程師</div>
+        <div class="timeline-sub">獨立 &amp; 團隊專案</div>
+        <div class="timeline-year">Now</div>
+      </div>
+    </div>
+
+    <div class="highlight-box fade-up d4">
+      <strong>核心特質：</strong>自學能力強 — 從零基礎到獨立完成完整網站開發，展現高度自驅力與學習效率
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 3: Skills -->
+<!-- ============================================================ -->
+<section class="slide slide-skills" id="slide-2">
+  <div class="slide-inner">
+    <p class="section-tag fade-up">Skills</p>
+    <h2 class="section-title fade-up d1">前端技術能力</h2>
+    <p class="section-subtitle fade-up d2">以 Vue.js 生態系為核心的前端開發技術棧</p>
+
+    <div class="skills-grid">
+      <div class="skill-card fade-up d2">
+        <div class="skill-card-title">
+          <span class="icon"><span style="color:#fff">&#9001;/&#9002;</span></span>
+          前端框架
+        </div>
+        <div class="skill-tags">
+          <span class="skill-tag">Vue3 Composition API</span>
+          <span class="skill-tag">Nuxt3</span>
+          <span class="skill-tag">Pinia</span>
+          <span class="skill-tag">Vue-Router</span>
+        </div>
+      </div>
+
+      <div class="skill-card fade-up d3">
+        <div class="skill-card-title">
+          <span class="icon"><span style="color:#fff">&#127912;</span></span>
+          UI / 樣式
+        </div>
+        <div class="skill-tags">
+          <span class="skill-tag">Tailwind CSS</span>
+          <span class="skill-tag">Bootstrap 5</span>
+          <span class="skill-tag">Sass / SCSS</span>
+          <span class="skill-tag">RWD</span>
+        </div>
+      </div>
+
+      <div class="skill-card fade-up d4">
+        <div class="skill-card-title">
+          <span class="icon"><span style="color:#fff">&#9881;</span></span>
+          前端基礎
+        </div>
+        <div class="skill-tags">
+          <span class="skill-tag">JavaScript</span>
+          <span class="skill-tag">TypeScript</span>
+          <span class="skill-tag">HTML</span>
+          <span class="skill-tag">CSS</span>
+          <span class="skill-tag">RESTful API 串接</span>
+        </div>
+      </div>
+
+      <div class="skill-card fade-up d5">
+        <div class="skill-card-title">
+          <span class="icon"><span style="color:#fff">&#128736;</span></span>
+          開發工具
+        </div>
+        <div class="skill-tags">
+          <span class="skill-tag">Git / GitHub</span>
+          <span class="skill-tag">GitFlow</span>
+          <span class="skill-tag">PR Review</span>
+          <span class="skill-tag">ESLint</span>
+          <span class="skill-tag">Prettier</span>
+          <span class="skill-tag">NPM</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Block -->
+    <div class="ai-block fade-up d5">
+      <div class="ai-block-icon">&#129302;</div>
+      <div>
+        <div class="ai-block-title">AI 輔助開發</div>
+        <div class="ai-block-desc">
+          善用 Claude Code 等 AI 工具提升開發效率，加速問題排查、程式碼重構與技術學習，讓開發產出更高效。
+        </div>
+      </div>
+    </div>
+
+    <div class="note-box fade-up d6">
+      補充：曾接觸 Node.js + Express 串接 MySQL / MongoDB，了解 MVC 基礎架構與前後端整合流程，但目前主力專注於前端開發。
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 4: Project 1 - Mealbox -->
+<!-- ============================================================ -->
+<section class="slide slide-project" id="slide-3">
+  <div class="slide-inner">
+    <p class="section-tag fade-up">Project 01</p>
+    <h2 class="section-title fade-up d1">健康餐盒訂購平台</h2>
+    <p class="project-date fade-up d2">多人協作專案 &nbsp;|&nbsp; 2024/7 ~ 2024/9</p>
+
+    <div class="project-layout">
+      <div class="project-meta fade-up d3">
+        <div class="project-info-card">
+          <strong>團隊組成</strong>
+          <span>前端 2 名 + 後端 1 名 + 設計 1 名</span>
+        </div>
+        <div class="project-info-card navy-border">
+          <strong>我的角色：前端技術規劃者</strong>
+          <span>負責技術選型、架構設計、協助夥伴解決技術問題</span>
+        </div>
+        <div>
+          <strong style="font-size:0.9rem; color:var(--navy); margin-bottom:0.5rem; display:block;">使用技術</strong>
+          <div class="skill-tags">
+            <span class="skill-tag">Vue3.js</span>
+            <span class="skill-tag">Element Plus</span>
+            <span class="skill-tag">Tailwind CSS</span>
+            <span class="skill-tag">SCSS</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-detail-card fade-up d4">
+        <div class="project-detail-title">主要負責項目</div>
+        <ul>
+          <li>規劃開發流程與任務分配</li>
+          <li>首頁、會員頁、註冊登入頁切版（含 RWD）</li>
+          <li>餐盒產品頁功能邏輯實作</li>
+          <li>菜色即時顯示與配置功能</li>
+          <li>Vercel 部署配置</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="project-links fade-up d5">
+      <a class="project-link" href="https://heshi.rocket-coding.com" target="_blank">&#127760; 查看網站</a>
+      <a class="project-link" href="https://github.com/AbsintheSung/rocket16th_healthy_mealbox" target="_blank">&#128193; GitHub</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 5: Project 2 - Hotel -->
+<!-- ============================================================ -->
+<section class="slide slide-project-alt" id="slide-4">
+  <div class="slide-inner">
+    <p class="section-tag fade-up">Project 02</p>
+    <h2 class="section-title fade-up d1">旅館訂房網站</h2>
+    <p class="project-date fade-up d2">個人獨立 Side Project &nbsp;|&nbsp; 2024/11 ~ 2024/12</p>
+
+    <div class="project-layout">
+      <div class="project-meta fade-up d3">
+        <div class="project-info-card">
+          <strong>獨立開發能力的證明</strong>
+          <span>從設計到部署，一人完成完整網站</span>
+        </div>
+        <div>
+          <strong style="font-size:0.9rem; color:var(--navy); margin-bottom:0.5rem; display:block;">使用技術</strong>
+          <div class="skill-tags">
+            <span class="skill-tag">Nuxt3</span>
+            <span class="skill-tag">Tailwind CSS</span>
+            <span class="skill-tag">Headless UI</span>
+          </div>
+          <div class="skill-tags" style="margin-top:0.4rem;">
+            <span class="skill-tag">VeeValidate (zod)</span>
+            <span class="skill-tag">VCalendar</span>
+          </div>
+        </div>
+        <div class="project-insight">
+          <strong>與職缺的關聯：</strong>Nuxt3 基於 Vue3，展現我對 Vue 生態系的深度掌握
+        </div>
+      </div>
+
+      <div class="project-detail-card fade-up d4">
+        <div class="project-detail-title">網站功能亮點</div>
+        <ul>
+          <li>完整頁面與互動邏輯實作</li>
+          <li>Nuxt3 SSR 架構實踐</li>
+          <li>Headless UI 元件整合</li>
+          <li>zod 表單驗證與日期選擇</li>
+          <li>RWD 響應式設計</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="project-links fade-up d5">
+      <a class="project-link" href="https://dapper-belekoy-9bba56.netlify.app/" target="_blank">&#127760; 查看網站</a>
+      <a class="project-link" href="https://github.com/AbsintheSung/xiangle-hotel" target="_blank">&#128193; GitHub</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 6: Closing（暫時隱藏整個 section）
+<section class="slide slide-closing" id="slide-5">
+  <div class="slide-inner">
+    <h2 class="closing-title fade-up">為什麼是我？</h2>
+    <div class="closing-sep fade-up d1"></div>
+
+    <ul class="closing-points">
+      <li class="fade-up d1">Vue3 + Nuxt3 實戰經驗，前端即戰力</li>
+      <li class="fade-up d2">團隊協作經驗：擔任前端技術規劃者，熟悉 GitFlow</li>
+      <li class="fade-up d3">善用 AI 工具提升開發效率，快速學習新技術</li>
+      <li class="fade-up d4">自學轉職的決心與執行力 — 從零到獨立開發</li>
+      <li class="fade-up d5">技術客服背景帶來的溝通力與問題解決能力</li>
+    </ul>
+
+    <div class="closing-divider fade-up d5"></div>
+
+    <p class="closing-contact fade-up d5">
+      黃韋菘 &nbsp;|&nbsp;
+      <a href="mailto:h90243768@gmail.com">h90243768@gmail.com</a> &nbsp;|&nbsp;
+      0932-051-549 &nbsp;|&nbsp;
+      <a href="https://github.com/AbsintheSung" target="_blank">github.com/AbsintheSung</a>
+    </p>
+
+    <p class="closing-thanks fade-up d6">感謝您的時間，期待有機會加入 EVOASIS 團隊！</p>
+  </div>
+</section>
+============================================================ -->
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+
+  // Create nav dots
+  const navDots = document.getElementById('navDots');
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot';
+    dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+    dot.addEventListener('click', () => {
+      slides[i].scrollIntoView({ behavior: 'smooth' });
+    });
+    navDots.appendChild(dot);
+  });
+  const dots = navDots.querySelectorAll('.nav-dot');
+
+  // Intersection observer for animations & active dot
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        // Trigger animations
+        entry.target.querySelectorAll('.fade-up').forEach(el => {
+          el.classList.add('visible');
+        });
+        // Update active dot
+        const idx = Array.from(slides).indexOf(entry.target);
+        dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      }
+    });
+  }, { threshold: 0.3 });
+
+  slides.forEach(slide => observer.observe(slide));
+
+  // Keyboard navigation
+  let currentSlide = 0;
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown') {
+      e.preventDefault();
+      currentSlide = Math.min(currentSlide + 1, totalSlides - 1);
+      slides[currentSlide].scrollIntoView({ behavior: 'smooth' });
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      e.preventDefault();
+      currentSlide = Math.max(currentSlide - 1, 0);
+      slides[currentSlide].scrollIntoView({ behavior: 'smooth' });
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      currentSlide = 0;
+      slides[0].scrollIntoView({ behavior: 'smooth' });
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      currentSlide = totalSlides - 1;
+      slides[totalSlides - 1].scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+
+  // Update currentSlide on scroll
+  const scrollObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        currentSlide = Array.from(slides).indexOf(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  slides.forEach(slide => scrollObserver.observe(slide));
+})();
+</script>
+</body>
+</html>
